@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Phone } from 'lucide-react'
+import { Menu, X, Phone, ShoppingBag } from 'lucide-react'
 import logo from '../../assets/teez-lounge-hero.png'
 import { links } from '../../data/site'
+import { useCart } from '../../context/CartContext'
 
 const navItems = [
   { name: 'Home', path: '/' },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const location = useLocation()
+  const { itemCount, toggleDrawer } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -36,7 +38,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="section-pad container-tight flex items-center justify-between">
-        {/* Logo (branding home) */}
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5">
           <img
             src={logo}
@@ -81,23 +83,69 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Desktop CTA */}
-        <a
-          href={links.call}
-          className="hidden items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-btn transition hover:bg-gold-dark lg:inline-flex"
-        >
-          <Phone size={16} />
-          Call to Order
-        </a>
+        {/* Desktop right: Cart + Call CTA */}
+        <div className="hidden items-center gap-3 lg:flex">
+          {/* Cart icon */}
+          <button
+            onClick={toggleDrawer}
+            className="relative p-2 text-ink/70 hover:text-gold-dark transition-colors"
+            aria-label="Open cart"
+          >
+            <ShoppingBag size={22} />
+            <AnimatePresence>
+              {itemCount > 0 && (
+                <motion.span
+                  key="badge"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-white"
+                >
+                  {itemCount > 99 ? '99+' : itemCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="text-ink lg:hidden"
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={26} /> : <Menu size={26} />}
-        </button>
+          <a
+            href={links.call}
+            className="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-btn transition hover:bg-gold-dark"
+          >
+            <Phone size={16} />
+            Call to Order
+          </a>
+        </div>
+
+        {/* Mobile: Cart icon + hamburger */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            onClick={toggleDrawer}
+            className="relative p-2 text-ink"
+            aria-label="Open cart"
+          >
+            <ShoppingBag size={22} />
+            <AnimatePresence>
+              {itemCount > 0 && (
+                <motion.span
+                  key="badge-mobile"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gold text-[9px] font-bold text-white"
+                >
+                  {itemCount > 9 ? '9+' : itemCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="text-ink"
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -117,9 +165,7 @@ export default function Navbar() {
                     to={item.path}
                     className={({ isActive }) =>
                       `block rounded-xl px-4 py-3 text-base font-medium transition ${
-                        isActive
-                          ? 'bg-beige text-gold-dark'
-                          : 'text-ink/75 hover:bg-cream'
+                        isActive ? 'bg-beige text-gold-dark' : 'text-ink/75 hover:bg-cream'
                       }`
                     }
                   >
