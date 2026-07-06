@@ -16,6 +16,7 @@ import Reviews from './pages/Reviews'
 import Contact from './pages/Contact'
 import Checkout from './pages/Checkout'
 import OrderSuccess from './pages/OrderSuccess'
+import Admin from './pages/Admin'
 
 function PageTransition({ children }) {
   return (
@@ -42,6 +43,7 @@ function AnimatedRoutes() {
         <Route path="/contact"       element={<PageTransition><Contact /></PageTransition>} />
         <Route path="/checkout"      element={<PageTransition><Checkout /></PageTransition>} />
         <Route path="/order-success" element={<PageTransition><OrderSuccess /></PageTransition>} />
+        <Route path="/admin"         element={<PageTransition><Admin /></PageTransition>} />
         <Route path="*"              element={<PageTransition><Home /></PageTransition>} />
       </Routes>
     </AnimatePresence>

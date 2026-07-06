@@ -7,6 +7,7 @@ import {
 import { useCart } from '../context/CartContext'
 import { useToast } from '../context/ToastContext'
 import { processPayment, buildWhatsAppMessage } from '../services/payment'
+import { createOrder } from '../services/orderService'
 import { site } from '../data/site'
 import { img } from '../data/images'
 import FoodPlaceholder from '../components/ui/FoodPlaceholder'
@@ -109,6 +110,23 @@ export default function Checkout() {
         items:    items.map((i) => ({ ...i })),
         method:   paymentMethod,
       })
+
+      try {
+        await createOrder({
+          orderId:       result.orderId,
+          customer,
+          items:         items.map((i) => ({ ...i })),
+          paymentMethod,
+          paymentRef:    result.paymentRef,
+          subtotal,
+          deliveryFee,
+          total,
+        })
+      } catch (dbErr) {
+        console.error('Order save failed:', dbErr)
+        alert(JSON.stringify(dbErr, null, 2))
+      }
+
       showToast('Payment successful! Preparing your order…', 'success')
       clearCart()
       navigate('/order-success', {
