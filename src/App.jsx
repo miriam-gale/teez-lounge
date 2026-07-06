@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { CartProvider } from './context/CartContext'
+import { ToastProvider } from './context/ToastContext'
 import CartDrawer from './components/cart/CartDrawer'
 import Layout from './components/layout/Layout'
 import ScrollToTop from './components/layout/ScrollToTop'
@@ -56,6 +57,7 @@ export default function App() {
   }, [])
 
   return (
+    <ToastProvider>
     <CartProvider>
       <AnimatePresence>{loading && <Loader key="loader" />}</AnimatePresence>
 
@@ -70,5 +72,6 @@ export default function App() {
         </>
       )}
     </CartProvider>
+    </ToastProvider>
   )
 }
