@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-gold/25 text-ink;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif text-ink;
+  }
+}
+
+@layer components {
+  /* Subtle gold text accent (no glow) */
+  .text-gold-accent {
+    @apply text-gold;
+  }
+
+  .gold-rule {
+    @apply h-[3px] w-16 rounded-full bg-gold;
+  }
+
+  .section-pad {
+    @apply px-5 sm:px-8 lg:px-16 xl:px-24;
+  }
+
+  .container-tight {
+    @apply mx-auto max-w-7xl;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white shadow-card transition-shadow duration-300;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-gold;
+  }
+}
+
+/* Soft neutral scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f0ebe2;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8c9a8;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4A017;
+}
